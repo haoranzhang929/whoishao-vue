@@ -100,6 +100,9 @@ export default {
 </script>
 
 <style scoped>
+nav {
+  z-index: 5;
+}
 .email {
   text-decoration: underline;
 }
