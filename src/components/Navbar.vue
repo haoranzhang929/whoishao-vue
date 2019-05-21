@@ -1,10 +1,10 @@
 <template>
   <nav>
-    <v-toolbar height="100px" flat class="transparent">
-      <v-toolbar-side-icon class="black--text" @click="drawer = !drawer"></v-toolbar-side-icon>
+    <v-toolbar prominent flat class="transparent">
+      <v-toolbar-side-icon class="secondary--text" @click="drawer = !drawer"></v-toolbar-side-icon>
 
-      <v-toolbar-title class="text-uppercase black--text">
-        <v-img src="/logo.svg" max-width="70px" min-width="70px"></v-img>
+      <v-toolbar-title class="text-uppercase secondary--text">
+        <v-img src="/logo.svg" max-width="50px" min-width="50px"></v-img>
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -13,8 +13,8 @@
         <v-btn
           flat
           large
-          color="black"
-          class="headline font-weight-light"
+          color="secondary"
+          class="title font-weight-light"
           active-class="selected"
           v-for="link in links"
           :key="link.icon"
@@ -25,13 +25,13 @@
 
       <v-toolbar-items class="hidden-md-and-up">
         <v-menu offset-y>
-          <v-btn flat large class="headline font-weight-light" slot="activator" color="black">
+          <v-btn flat large class="title font-weight-light" slot="activator" color="secondary">
             <v-icon left>expand_more</v-icon>
             <span>Menu</span>
           </v-btn>
           <v-list>
             <v-list-tile v-for="link in links" :key="link.icon" router :to="link.route">
-              <v-list-tile-title class="black--text headline font-weight-light">{{ link.text }}</v-list-tile-title>
+              <v-list-tile-title class="secondary--text headline font-weight-light">{{ link.text }}</v-list-tile-title>
             </v-list-tile>
           </v-list>
         </v-menu>
@@ -46,7 +46,7 @@
           </v-avatar>
         </v-flex>
         <v-flex>
-          <p class="black--text title mt-3 text-xs-center">Haoran Zhang</p>
+          <p class="secondary--text title mt-3 text-xs-center">Haoran Zhang</p>
         </v-flex>
         <v-flex class="mb-2">
           <a
@@ -57,8 +57,8 @@
       </v-layout>
       <v-list>
         <v-list-tile
-          class="grey--text text--darken-2"
-          active-class="blue lighten-4 blue--text text--darken-3"
+          class="secondary--text text--darken-2"
+          active-class="grey lighten-4 grey--text text--darken-3"
           v-for="link in links"
           :key="link.text"
           router
@@ -66,7 +66,7 @@
           ripple
         >
           <v-list-tile-action>
-            <v-icon>{{ link.icon }}</v-icon>
+            <v-icon color="secondary">{{ link.icon }}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>{{ link.text }}</v-list-tile-title>
@@ -97,13 +97,16 @@ export default {
 nav {
   z-index: 5;
 }
+
 .email {
   text-decoration: underline;
 }
+
 .selected {
   background-color: transparent;
   text-decoration: line-through;
 }
+
 .v-list__tile--active > .v-list__tile__title {
   text-decoration: line-through;
 }

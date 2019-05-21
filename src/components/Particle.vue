@@ -18,7 +18,7 @@ export default {
             }
           },
           color: {
-            value: "#FF8A80"
+            value: "#cac3bb"
           },
           shape: {
             type: "circle",
@@ -36,12 +36,12 @@ export default {
             }
           },
           opacity: {
-            value: 0.3,
+            value: 0.6,
             random: true,
             anim: {
               enable: false,
               speed: 0.5,
-              opacity_min: 0.1,
+              opacity_min: 0.2,
               sync: false
             }
           },
