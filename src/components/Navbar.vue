@@ -1,10 +1,10 @@
 <template>
   <nav>
-    <v-toolbar prominent class="light-blue darken-3">
-      <v-toolbar-side-icon class="white--text" @click="drawer = !drawer"></v-toolbar-side-icon>
+    <v-toolbar height="100px" flat class="transparent">
+      <v-toolbar-side-icon class="black--text" @click="drawer = !drawer"></v-toolbar-side-icon>
 
-      <v-toolbar-title class="text-uppercase white--text">
-        <v-img src="/logo.svg" max-width="40px" min-width="40px"></v-img>
+      <v-toolbar-title class="text-uppercase black--text">
+        <v-img src="/logo.svg" max-width="70px" min-width="70px"></v-img>
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -12,32 +12,26 @@
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn
           flat
-          icon
-          color="white"
+          large
+          color="black"
+          class="headline font-weight-light"
+          active-class="selected"
           v-for="link in links"
           :key="link.icon"
           router
           :to="link.route"
-        >
-          <v-icon>{{ link.icon }}</v-icon>
-        </v-btn>
+        >{{ link.text }}</v-btn>
       </v-toolbar-items>
 
       <v-toolbar-items class="hidden-md-and-up">
         <v-menu offset-y>
-          <v-btn flat slot="activator" color="white">
+          <v-btn flat large class="headline font-weight-light" slot="activator" color="black">
             <v-icon left>expand_more</v-icon>
             <span>Menu</span>
           </v-btn>
           <v-list>
             <v-list-tile v-for="link in links" :key="link.icon" router :to="link.route">
-              <v-list-tile-action>
-                <v-icon>{{ link.icon }}</v-icon>
-              </v-list-tile-action>
-
-              <v-list-tile-content>
-                <v-list-tile-title>{{ link.text }}</v-list-tile-title>
-              </v-list-tile-content>
+              <v-list-tile-title class="black--text headline font-weight-light">{{ link.text }}</v-list-tile-title>
             </v-list-tile>
           </v-list>
         </v-menu>
@@ -105,5 +99,12 @@ nav {
 }
 .email {
   text-decoration: underline;
+}
+.selected {
+  background-color: transparent;
+  text-decoration: line-through;
+}
+.v-list__tile--active > .v-list__tile__title {
+  text-decoration: line-through;
 }
 </style>

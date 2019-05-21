@@ -5,3 +5,9 @@
     <v-spacer></v-spacer>
   </v-footer>
 </template>
+
+<style scoped>
+.v-footer {
+  z-index: 6;
+}
+</style>

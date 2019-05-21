@@ -1,7 +1,11 @@
 <template>
-  <div>
-    <h1>Contact page</h1>
-  </div>
+  <v-container fill-height>
+    <v-layout column>
+      <v-flex class="display-4 text-xs-center">Contact</v-flex>
+      <v-flex class="display-4 text-xs-center">Contact</v-flex>
+      <v-flex class="display-4 text-xs-center">Contact</v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
