@@ -11,11 +11,17 @@ export default new Router({
     {
       path: "/",
       name: "home",
+      meta: {
+        title: "Who is Hao?"
+      },
       component: Home
     },
     {
       path: "/projects",
       name: "projects",
+      meta: {
+        title: "Hao | Projects"
+      },
       // route level code-splitting
       // this generates a separate chunk (projects.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
@@ -25,6 +31,9 @@ export default new Router({
     {
       path: "/contact",
       name: "contact",
+      meta: {
+        title: "Hao | Contact"
+      },
       // route level code-splitting
       // this generates a separate chunk (contact.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
@@ -34,6 +43,9 @@ export default new Router({
     {
       path: "/about",
       name: "about",
+      meta: {
+        title: "Hao | About"
+      },
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.

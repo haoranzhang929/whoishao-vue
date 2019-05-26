@@ -46,12 +46,12 @@ export default {
             }
           },
           size: {
-            value: 80,
+            value: 100,
             random: true,
             anim: {
               enable: true,
               speed: 10,
-              size_min: 60,
+              size_min: 80,
               sync: false
             }
           },
@@ -68,7 +68,7 @@ export default {
             direction: "none",
             random: true,
             straight: false,
-            out_mode: "out",
+            out_mode: "bounce",
             bounce: false,
             attract: {
               enable: false,

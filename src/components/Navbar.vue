@@ -7,6 +7,10 @@
         <v-img src="/logo.svg" max-width="50px" min-width="50px"></v-img>
       </v-toolbar-title>
 
+      <v-toolbar-title class="text-uppercase secondary--text">
+        <span class="headline font-weight-light">Hao</span>
+      </v-toolbar-title>
+
       <v-spacer></v-spacer>
 
       <v-toolbar-items class="hidden-sm-and-down">
@@ -57,8 +61,8 @@
       </v-layout>
       <v-list>
         <v-list-tile
-          class="secondary--text text--darken-2"
-          active-class="grey lighten-4 grey--text text--darken-3"
+          class="secondary--text text--lighten-2"
+          active-class="grey lighten-4 secondary--text text--lighten-1"
           v-for="link in links"
           :key="link.text"
           router
@@ -66,7 +70,7 @@
           ripple
         >
           <v-list-tile-action>
-            <v-icon color="secondary">{{ link.icon }}</v-icon>
+            <v-icon color="secondary lighten-2">{{ link.icon }}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>{{ link.text }}</v-list-tile-title>

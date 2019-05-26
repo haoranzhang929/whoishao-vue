@@ -1,5 +1,5 @@
 <template>
-  <div id="three-container"></div>
+  <div id="three-container" class="keepShaking"></div>
 </template>
 
 <script>
@@ -9,6 +9,8 @@ export default {
   name: "Three",
   data() {
     return {
+      canvasWidth: null,
+      canvasHeight: null,
       camera: null,
       scene: null,
       renderer: null,
@@ -16,18 +18,21 @@ export default {
       hemisphereLight: null,
       text3D: null,
       pivot: null,
-      targetRotation: 0
+      targetRotation: 0,
+      targetRotationOnMouseDown: 0,
+      mouseX: 0,
+      mouseXOnMouseDown: 0
     };
   },
   methods: {
     init: function() {
       const container = document.getElementById("three-container");
-      const canvasWidth = window.innerHeight / 2;
-      const canvasHeight = window.innerHeight / 2;
+      this.canvasWidth = window.innerHeight / 2;
+      this.canvasHeight = window.innerHeight / 2;
 
       this.camera = new THREE.PerspectiveCamera(
         65,
-        canvasWidth / canvasHeight,
+        this.canvasWidth / this.canvasHeight,
         0.1,
         1000
       );
@@ -35,20 +40,20 @@ export default {
 
       this.scene = new THREE.Scene();
 
-      this.ambLight = new THREE.AmbientLight(0xffffff, 0.6);
+      this.ambLight = new THREE.AmbientLight(0xffffff, 0.7);
       this.scene.add(this.ambLight);
 
       this.hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x000000, 0.6);
       this.scene.add(this.hemisphereLight);
 
-      // Helper
-      const axesHelper = new THREE.AxesHelper(10);
-      this.scene.add(axesHelper);
-      const gridHelper = new THREE.GridHelper(10, 10);
-      this.scene.add(gridHelper);
+      // // Helper
+      // const axesHelper = new THREE.AxesHelper(10);
+      // this.scene.add(axesHelper);
+      // const gridHelper = new THREE.GridHelper(10, 10);
+      // this.scene.add(gridHelper);
 
       this.text3D = this.loadText();
-      this.text3D.position.x = -2.6;
+      this.text3D.position.x = -2.8;
       this.text3D.position.y = -1.7;
 
       this.pivot = new THREE.Object3D().add(this.text3D);
@@ -57,13 +62,32 @@ export default {
       const cvsClick = document.querySelector("#three-container");
 
       cvsClick.addEventListener("click", () => {
+        if (cvsClick.classList.contains("keepShaking")) {
+          cvsClick.classList.remove("keepShaking");
+        }
         this.toggleText();
       });
 
       this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       this.renderer.setPixelRatio(window.devicePixelRatio);
-      this.renderer.setSize(canvasWidth, canvasHeight);
+      this.renderer.setSize(this.canvasWidth, this.canvasHeight);
       container.appendChild(this.renderer.domElement);
+
+      this.renderer.domElement.addEventListener(
+        "mousedown",
+        this.onDocumentMouseDown,
+        false
+      );
+      this.renderer.domElement.addEventListener(
+        "touchstart",
+        this.onDocumentTouchStart,
+        false
+      );
+      this.renderer.domElement.addEventListener(
+        "touchmove",
+        this.onDocumentTouchMove,
+        false
+      );
     },
     animate: function() {
       requestAnimationFrame(this.animate);
@@ -75,29 +99,37 @@ export default {
     loadText: function() {
       const textLoader = new THREE.FontLoader();
       const objContainer = new THREE.Object3D();
-      textLoader.load("/DFPKingGothicGB-Thin-2.json", font => {
-        const geometry = new THREE.TextGeometry("皓", {
-          font: font,
-          size: 3.6,
-          height: 0.5
-        });
-        geometry.computeBoundingBox();
-        const geo = new THREE.EdgesGeometry(geometry);
-        const lineMaterial = new THREE.LineBasicMaterial({
-          color: 0xa27e7e
-        });
-        const material = new THREE.MeshPhongMaterial({
-          color: 0xa6a6a8
-        });
-        const mesh = new THREE.Mesh(geometry, material);
-        const line = new THREE.LineSegments(geo, lineMaterial);
-        line.material.depthTest = false;
-        line.material.opacity = 1;
-        line.material.transparent = true;
-        line.visible = false;
-        objContainer.add(mesh);
-        objContainer.add(line);
-      });
+      textLoader.load(
+        "/hao.json",
+        font => {
+          const geometry = new THREE.TextGeometry("皓", {
+            font: font,
+            size: 4,
+            height: 0.5
+          });
+          geometry.computeBoundingBox();
+          const geo = new THREE.EdgesGeometry(geometry);
+          const lineMaterial = new THREE.LineBasicMaterial({
+            color: 0xa27e7e
+          });
+          const material = new THREE.MeshPhongMaterial({
+            color: 0xa6a6a8
+          });
+          const mesh = new THREE.Mesh(geometry, material);
+          const line = new THREE.LineSegments(geo, lineMaterial);
+          line.material.depthTest = false;
+          line.material.opacity = 1;
+          line.material.transparent = true;
+          line.visible = false;
+          objContainer.add(mesh);
+          objContainer.add(line);
+        },
+        xhr => {
+          if ((xhr.loaded / xhr.total) * 100 === 100) {
+            this.onObjLoaded();
+          }
+        }
+      );
       return objContainer;
     },
     toggleText: function() {
@@ -107,6 +139,82 @@ export default {
         : ((this.text3D.children[0].visible = true),
           (this.text3D.children[1].visible = false));
       navigator.vibrate(100);
+    },
+    onDocumentMouseDown: function(event) {
+      this.renderer.domElement.addEventListener(
+        "mousemove",
+        this.onDocumentMouseMove,
+        false
+      );
+      this.renderer.domElement.addEventListener(
+        "mouseup",
+        this.onDocumentMouseUp,
+        false
+      );
+      this.renderer.domElement.addEventListener(
+        "mouseout",
+        this.onDocumentMouseOut,
+        false
+      );
+      this.mouseXOnMouseDown = event.clientX - this.canvasWidth / 2;
+      this.targetRotationOnMouseDown = this.targetRotation;
+    },
+    onDocumentMouseMove: function(event) {
+      this.mouseX = event.clientX - this.canvasWidth / 2;
+      this.targetRotation =
+        this.targetRotationOnMouseDown +
+        (this.mouseX - this.mouseXOnMouseDown) * 0.02;
+    },
+    onDocumentMouseUp: function() {
+      this.renderer.domElement.removeEventListener(
+        "mousemove",
+        this.onDocumentMouseMove,
+        false
+      );
+      this.renderer.domElement.removeEventListener(
+        "mouseup",
+        this.onDocumentMouseUp,
+        false
+      );
+      this.renderer.domElement.removeEventListener(
+        "mouseout",
+        this.onDocumentMouseOut,
+        false
+      );
+    },
+    onDocumentMouseOut: function() {
+      this.renderer.domElement.removeEventListener(
+        "mousemove",
+        this.onDocumentMouseMove,
+        false
+      );
+      this.renderer.domElement.removeEventListener(
+        "mouseup",
+        this.onDocumentMouseUp,
+        false
+      );
+      this.renderer.domElement.removeEventListener(
+        "mouseout",
+        this.onDocumentMouseOut,
+        false
+      );
+    },
+    onDocumentTouchStart: function(event) {
+      if (event.touches.length == 1) {
+        this.mouseXOnMouseDown = event.touches[0].pageX - this.canvasWidth / 2;
+        this.targetRotationOnMouseDown = this.targetRotation;
+      }
+    },
+    onDocumentTouchMove: function(event) {
+      if (event.touches.length == 1) {
+        this.mouseX = event.touches[0].pageX - this.canvasWidth / 2;
+        this.targetRotation =
+          this.targetRotationOnMouseDown +
+          (this.mouseX - this.mouseXOnMouseDown) * 0.05;
+      }
+    },
+    onObjLoaded: function() {
+      this.$emit("onObjLoaded", true);
     }
   },
   mounted() {
@@ -121,6 +229,46 @@ export default {
   #three-container {
     display: flex;
     justify-content: center;
+  }
+}
+
+.keepShaking {
+  animation: leftRightShake 3s infinite;
+}
+
+@keyframes leftRightShake {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  10% {
+    transform: translate3d(0, 0, 0);
+  }
+  20% {
+    transform: translate3d(0, 0, 0);
+  }
+  30% {
+    transform: translate3d(0, 0, 0);
+  }
+  40% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(8px, 0, 0);
+  }
+  60% {
+    transform: translate3d(-8px, 0, 0);
+  }
+  70% {
+    transform: translate3d(8px, 0, 0);
+  }
+  80% {
+    transform: translate3d(-8px, 0, 0);
+  }
+  90% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
   }
 }
 </style>

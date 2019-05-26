@@ -12,8 +12,8 @@
     "particles.js": "^2.0.0",
     "three": "^0.103.0",
     "vue": "^2.6.10",
+    "vue-pose": "^0.5.1",
     "vue-router": "^3.0.3",
-    "vue-typer": "^1.2.0",
     "vuetify": "^1.5.5"
   },
   "devDependencies": {
