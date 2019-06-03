@@ -102,7 +102,7 @@ export default {
       textLoader.load(
         "/hao.json",
         font => {
-          const geometry = new THREE.TextGeometry("皓", {
+          const geometry = new THREE.TextBufferGeometry("皓", {
             font: font,
             size: 4,
             height: 0.5
