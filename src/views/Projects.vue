@@ -1,5 +1,5 @@
 <template>
-  <v-container fill-height>
+  <v-container fill-height class="mt-2">
     <v-layout row wrap justify-center>
       <v-carousel height="550px">
         <v-carousel-item v-for="(project,i) in projects" :key="i" :src="project.src">
@@ -80,7 +80,7 @@ export default {
   width: 300px;
   height: 50px;
   text-align: center;
-  background: rgba(201, 194, 186, 0.7);
+  background: rgba(0, 0, 0, 0.5);
   color: #fff;
   border-radius: 3px;
 }
