@@ -59,11 +59,9 @@ export default {
       this.pivot = new THREE.Object3D().add(this.text3D);
       this.scene.add(this.pivot);
 
-      const cvsClick = document.querySelector("#three-container");
-
-      cvsClick.addEventListener("click", () => {
-        if (cvsClick.classList.contains("keepShaking")) {
-          cvsClick.classList.remove("keepShaking");
+      container.addEventListener("click", () => {
+        if (container.classList.contains("keepShaking")) {
+          container.classList.remove("keepShaking");
         }
         this.toggleText();
       });
