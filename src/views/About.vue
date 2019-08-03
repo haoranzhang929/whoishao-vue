@@ -2,7 +2,7 @@
   <v-container align-content-center fluid fill-height>
     <v-layout row wrap align-center v-show="isLoaded">
       <v-flex xs12 md6 align-self-center class="display-4 text-xs-center about-item">
-        <Three v-on:onObjLoaded="onObjLoaded"/>
+        <Hao v-on:onObjLoaded="onObjLoaded"/>
       </v-flex>
       <v-flex xs12 md6 align-self-center class="text-xs-center about-item about-item--1">
         <P
@@ -11,7 +11,7 @@
         <P class="display-3 secondary--text font-weight-light about-sub-item about-sub-item--2">Code</P>
         <P
           class="display-3 secondary--text text--darken-1 font-weight-regular about-sub-item about-sub-item--3"
-        >Alive</P>
+        >Music</P>
       </v-flex>
     </v-layout>
     <v-layout row wrap align-center v-if="!isLoaded">
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import Three from "@/components/Three";
+import Hao from "@/components/Hao";
 import posed from "vue-pose";
 
 export default {
@@ -33,7 +33,7 @@ export default {
     };
   },
   components: {
-    Three,
+    Hao,
     P: posed.p({
       hoverable: true,
       draggable: true,

@@ -27,13 +27,13 @@ export default {
         {
           name: "Image Finder",
           src: "/Image-search.png",
-          demo: "http://hao-search.tk/",
+          // demo: "http://hao-search.tk/",
           code: "https://github.com/haoranzhang929/unsplash-image-finder"
         },
         {
           name: "Audio Visual Tool",
           src: "/audio-freq.png",
-          demo: "http://ec2-52-213-180-139.eu-west-1.compute.amazonaws.com/",
+          // demo: "http://ec2-52-213-180-139.eu-west-1.compute.amazonaws.com/",
           code:
             "https://github.com/haoranzhang929/audio-frequency-visual-generators"
         },
