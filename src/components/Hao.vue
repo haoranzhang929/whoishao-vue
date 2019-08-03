@@ -6,7 +6,8 @@
 import * as THREE from "three";
 
 export default {
-  name: "Three",
+  name: "Hao",
+  props: ["isAbout"],
   data() {
     return {
       canvasWidth: null,
@@ -17,11 +18,14 @@ export default {
       ambLight: null,
       hemisphereLight: null,
       text3D: null,
+      ground: null,
+      groundCopy: null,
       pivot: null,
       targetRotation: 0,
       targetRotationOnMouseDown: 0,
       mouseX: 0,
-      mouseXOnMouseDown: 0
+      mouseXOnMouseDown: 0,
+      mousePos: { x: 0, y: 0 }
     };
   },
   methods: {
@@ -36,9 +40,11 @@ export default {
         0.1,
         1000
       );
+
       this.camera.position.set(0, 0, 6);
 
       this.scene = new THREE.Scene();
+      this.isAbout && (this.scene.fog = new THREE.Fog(0xfafafa, 1, 150));
 
       this.ambLight = new THREE.AmbientLight(0xffffff, 0.7);
       this.scene.add(this.ambLight);
@@ -59,10 +65,13 @@ export default {
       this.pivot = new THREE.Object3D().add(this.text3D);
       this.scene.add(this.pivot);
 
+      this.isAbout && container.classList.remove("keepShaking");
+
       container.addEventListener("click", () => {
-        if (container.classList.contains("keepShaking")) {
+        if (container.classList.contains("keepShaking") && !this.isAbout) {
           container.classList.remove("keepShaking");
         }
+
         this.toggleText();
       });
 
@@ -71,27 +80,35 @@ export default {
       this.renderer.setSize(this.canvasWidth, this.canvasHeight);
       container.appendChild(this.renderer.domElement);
 
-      this.renderer.domElement.addEventListener(
-        "mousedown",
-        this.onDocumentMouseDown,
-        false
-      );
-      this.renderer.domElement.addEventListener(
-        "touchstart",
-        this.onDocumentTouchStart,
-        false
-      );
-      this.renderer.domElement.addEventListener(
-        "touchmove",
-        this.onDocumentTouchMove,
-        false
-      );
+      if (this.isAbout) {
+        document.addEventListener("mousemove", this.handleMouseMove, false);
+        document.addEventListener("touchmove", this.handleTouchmove, false);
+      } else {
+        this.renderer.domElement.addEventListener(
+          "mousedown",
+          this.onDocumentMouseDown,
+          false
+        );
+        this.renderer.domElement.addEventListener(
+          "touchstart",
+          this.onDocumentTouchStart,
+          false
+        );
+        this.renderer.domElement.addEventListener(
+          "touchmove",
+          this.onDocumentTouchMove,
+          false
+        );
+      }
     },
     animate: function() {
       requestAnimationFrame(this.animate);
-      this.pivot.rotation.y -= 0.03;
-      this.pivot.rotation.y +=
-        (this.targetRotation - this.pivot.rotation.y) * 0.05;
+      if (!this.isAbout) {
+        this.pivot.rotation.y -= 0.03;
+        this.pivot.rotation.y +=
+          (this.targetRotation - this.pivot.rotation.y) * 0.05;
+      }
+
       this.renderer.render(this.scene, this.camera);
     },
     loadText: function() {
@@ -115,10 +132,16 @@ export default {
           });
           const mesh = new THREE.Mesh(geometry, material);
           const line = new THREE.LineSegments(geo, lineMaterial);
+          if (this.isAbout) {
+            mesh.visible = false;
+            line.visible = true;
+          } else {
+            mesh.visible = true;
+            line.visible = false;
+          }
           line.material.depthTest = false;
           line.material.opacity = 1;
           line.material.transparent = true;
-          line.visible = false;
           objContainer.add(mesh);
           objContainer.add(line);
         },
@@ -210,6 +233,22 @@ export default {
           this.targetRotationOnMouseDown +
           (this.mouseX - this.mouseXOnMouseDown) * 0.05;
       }
+    },
+    handleMouseMove: function(event) {
+      let tx = -1 + event.clientX / this.canvasWidth / 2;
+      let ty = 1 - (event.clientY / this.canvasHeight / 2) * 2;
+      this.mousePos = { x: tx, y: ty };
+      this.pivot.position.x = this.mousePos.x * 3;
+      this.pivot.position.y = this.mousePos.y * 3;
+      this.camera.lookAt(this.pivot.position);
+    },
+    handleTouchmove: function(event) {
+      let tx = -1 + (event.touches[0].pageX / this.canvasWidth) * 2;
+      let ty = 1 - (event.touches[0].pageX / this.canvasHeight) * 2;
+      this.mousePos = { x: tx, y: ty };
+      this.pivot.position.x = this.mousePos.x * 4;
+      this.pivot.position.y = this.mousePos.y * 2;
+      this.camera.lookAt(this.pivot.position);
     },
     onObjLoaded: function() {
       this.$emit("onObjLoaded", true);

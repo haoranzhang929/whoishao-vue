@@ -11,7 +11,7 @@
         >Music</P>
       </v-flex>
       <v-flex xs12 md6 align-self-center class="display-4 text-xs-center home-item">
-        <Hao v-on:onObjLoaded="onObjLoaded"/>
+        <Hao v-on:onObjLoaded="onObjLoaded" v-bind:isAbout="false"/>
       </v-flex>
     </v-layout>
     <v-layout row wrap align-center v-if="!isLoaded">
